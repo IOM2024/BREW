@@ -1,0 +1,55 @@
+<!-- templates/shop/ingredient.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart Ingredients</title>
+    <style>
+        .hidden {
+            display: none;
+        }
+        .ingredients {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cart Ingredients</h1>
+    <div>
+        {% for item in cart_items %}
+            <div class="card">
+                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                <h2>{{ item.product.name }}</h2>
+                <p>Price: Ksh {{ item.product.price }}</p>
+                <p>Quantity: {{ item.quantity }}</p>
+                <button onclick="showIngredients('{{ item.product.id }}')">Ingredients</button>
+                <div id="ingredients-{{ item.product.id }}" class="ingredients hidden">
+                    <!-- Add your ingredients here -->
+                    <label for="milkRange-{{ item.product.id }}">Milk:</label>
+                    <input type="range" id="milkRange-{{ item.product.id }}" name="milkRange" min="0" max="100" value="50">
+                    <span id="milkRangeAmount-{{ item.product.id }}">50</span>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        function showIngredients(productId) {
+            var ingredientsDiv = document.getElementById('ingredients-' + productId);
+            if (ingredientsDiv.classList.contains('hidden')) {
+                ingredientsDiv.classList.remove('hidden');
+            } else {
+                ingredientsDiv.classList.add('hidden');
+            }
+        }
+
+        document.querySelectorAll('input[type="range"]').forEach(function(rangeInput) {
+            rangeInput.addEventListener('input', function() {
+                var spanId = this.id + 'Amount';
+                document.getElementById(spanId).innerText = this.value;
+            });
+        });
+    </script>
+</body>
+</html>
